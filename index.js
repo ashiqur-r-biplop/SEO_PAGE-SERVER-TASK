@@ -40,18 +40,15 @@ async function run() {
     app.patch("/uploadFiles/:id", async (req, res) => {
       const id = req.params.id;
       const singleCard = req.body;
-      console.log(singleCard)
+      console.log(singleCard);
       const client_id = { client_id: id };
-      const getCard = await card.findOne(client_id);
-      const uploadsFile = getCard?.["uploads-file"];
-        const uploadedFile = uploadsFile.push(singleCard?.["uploads-file"])
       const options = { upsert: true };
       const uploadFIle = {
         $set: {
-          ["uploads-file"]:  uploadedFile,
+          ["uploads-file"]: singleCard?.["uploads-file"],
         },
       };
-      const result = await classCollection.updateOne(
+      const result = await card.updateOne(
         client_id,
         uploadFIle,
         options
